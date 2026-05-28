@@ -1,7 +1,7 @@
 package com.jcaa.usersmanagement.application.service.mapper;
 
 import com.jcaa.usersmanagement.application.service.dto.command.CreateProducerCommand;
-import com.jcaa.usersmanagement.application.service.dto.command.DeleteUserCommand;
+import com.jcaa.usersmanagement.application.service.dto.command.DeleteProducerCommand;
 import com.jcaa.usersmanagement.domain.enums.ProducerEntityType;
 import com.jcaa.usersmanagement.domain.enums.ProducerTypeActivity;
 import com.jcaa.usersmanagement.domain.model.Producer;
@@ -24,7 +24,7 @@ public class ProducerApplicationMapper {
         );
     }
 
-    public ProducerId fromDeleteCommandToProducerId(final DeleteUserCommand command) {
+    public ProducerId fromDeleteCommandToProducerId(final DeleteProducerCommand command) {
         return new ProducerId(command.id());
     }
 }
