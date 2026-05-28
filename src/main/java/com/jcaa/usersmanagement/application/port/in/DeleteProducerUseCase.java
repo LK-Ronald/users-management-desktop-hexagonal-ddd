@@ -1,0 +1,10 @@
+package com.jcaa.usersmanagement.application.port.in;
+
+import com.jcaa.usersmanagement.application.service.dto.command.DeleteProducerCommand;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+
+public interface DeleteProducerUseCase {
+
+    void execute(@NotNull @Valid DeleteProducerCommand command);
+}
