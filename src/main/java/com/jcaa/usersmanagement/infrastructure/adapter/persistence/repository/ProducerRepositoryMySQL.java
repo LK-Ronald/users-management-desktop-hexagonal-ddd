@@ -20,7 +20,7 @@ import java.util.Optional;
 public class ProducerRepositoryMySQL implements DeleteProducerPort, GetAllProducerPort, GetProducerByIdPort, SaveProducerPort {
 
     private static final String SQL_INSERT = "INSERT INTO producer (id, name, entity_type, type_activity, country, city, street, postal, created_at) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW()";
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
 
     private static final String SQL_SELECT_BY_ID = "SELECT id, name, entity_type, type_activity, country, city, street, postal, created_at" +
             " FROM producer" +
@@ -85,7 +85,6 @@ public class ProducerRepositoryMySQL implements DeleteProducerPort, GetAllProduc
             statement.setString(6, dto.city());
             statement.setString(7, dto.street());
             statement.setString(8, dto.postal());
-            statement.setString(9, dto.createdAt());
             statement.executeUpdate();
 
         } catch (final SQLException e) {
