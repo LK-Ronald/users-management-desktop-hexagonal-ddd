@@ -7,7 +7,6 @@
   <groupId>com.jcaa.usersmanagement</groupId>
   <artifactId>users-management</artifactId>
   <version>1.6.0</version>
->>>>>>> feature/infrastructure-layer-components
 
   <properties>
     <maven.compiler.source>17</maven.compiler.source>
