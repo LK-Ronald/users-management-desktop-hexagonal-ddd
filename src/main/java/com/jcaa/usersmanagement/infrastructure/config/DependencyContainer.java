@@ -1,23 +1,14 @@
 package com.jcaa.usersmanagement.infrastructure.config;
 
-import com.jcaa.usersmanagement.application.port.in.CreateUserUseCase;
-import com.jcaa.usersmanagement.application.port.in.DeleteUserUseCase;
-import com.jcaa.usersmanagement.application.port.in.GetAllUsersUseCase;
-import com.jcaa.usersmanagement.application.port.in.GetUserByIdUseCase;
-import com.jcaa.usersmanagement.application.port.in.LoginUseCase;
-import com.jcaa.usersmanagement.application.port.in.UpdateUserUseCase;
-import com.jcaa.usersmanagement.application.service.CreateUserService;
-import com.jcaa.usersmanagement.application.service.DeleteUserService;
-import com.jcaa.usersmanagement.application.service.EmailNotificationService;
-import com.jcaa.usersmanagement.application.service.GetAllUsersService;
-import com.jcaa.usersmanagement.application.service.GetUserByIdService;
-import com.jcaa.usersmanagement.application.service.LoginService;
-import com.jcaa.usersmanagement.application.service.UpdateUserService;
+import com.jcaa.usersmanagement.application.port.in.*;
+import com.jcaa.usersmanagement.application.service.*;
 import com.jcaa.usersmanagement.infrastructure.adapter.email.JavaMailEmailSenderAdapter;
 import com.jcaa.usersmanagement.infrastructure.adapter.email.SmtpConfig;
 import com.jcaa.usersmanagement.infrastructure.adapter.persistence.config.DatabaseConfig;
 import com.jcaa.usersmanagement.infrastructure.adapter.persistence.config.DatabaseConnectionFactory;
+import com.jcaa.usersmanagement.infrastructure.adapter.persistence.repository.ProducerRepositoryMySQL;
 import com.jcaa.usersmanagement.infrastructure.adapter.persistence.repository.UserRepositoryMySQL;
+import com.jcaa.usersmanagement.infrastructure.entrypoint.desktop.controller.ProducerController;
 import com.jcaa.usersmanagement.infrastructure.entrypoint.desktop.controller.UserController;
 
 import java.sql.Connection;
@@ -39,6 +30,7 @@ public final class DependencyContainer {
   private static final String SMTP_FROM_NAME = "smtp.from.name";
 
   private final UserController userController;
+  private final ProducerController producerController;
 
   public DependencyContainer() {
     final AppProperties properties = new AppProperties();
@@ -46,7 +38,9 @@ public final class DependencyContainer {
     final Connection connection = buildDatabaseConnection(properties);
     final UserRepositoryMySQL userRepository = new UserRepositoryMySQL(connection);
 
-    final JavaMailEmailSenderAdapter emailSender =
+    final ProducerRepositoryMySQL producerRepository = new ProducerRepositoryMySQL(connection);
+
+      final JavaMailEmailSenderAdapter emailSender =
         new JavaMailEmailSenderAdapter(buildSmtpConfig(properties));
     final EmailNotificationService emailNotification = new EmailNotificationService(emailSender);
 
@@ -71,10 +65,27 @@ public final class DependencyContainer {
             getUserByIdUseCase,
             getAllUsersUseCase,
             loginUseCase);
+
+      final CreateProducerUseCase createProducerUseCase = new CreateProducerService(producerRepository, validator);
+      final DeleteProducerUseCase deleteProducerUseCase = new DeleteProducerService(producerRepository, producerRepository, validator);
+      final GetProducerByIdUseCase getProducerByIdUseCase = new GetProducerByIdService(producerRepository, validator);
+      final GetAllProducerUseCase getAllProducerUseCase = new GetAllProducerService(producerRepository);
+
+      this.producerController =
+              new ProducerController(
+                      createProducerUseCase,
+                      deleteProducerUseCase,
+                      getProducerByIdUseCase,
+                      getAllProducerUseCase);
+
   }
 
   public UserController userController() {
     return userController;
+  }
+
+  public ProducerController producerController() {
+    return producerController;
   }
 
   private static Connection buildDatabaseConnection(final AppProperties properties) {
