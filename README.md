@@ -2,7 +2,7 @@
 
 Ejemplo de una aplicación Desktop que hace CRUDL y control de acceso de Usuarios, escrita en Java, arquitectura Hexagonal y enfoque DDD, usando buenas practicas y Clean code.
 
-## Versión 1.5.0
+## Versión 1.6.0
 
 En esta versión se integró el soporte interactivo de consola para la entidad Productor:
 
